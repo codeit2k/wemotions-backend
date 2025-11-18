@@ -1,0 +1,9 @@
+services:
+  App\:
+    resource: '../src/*'
+    exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+  App\Controller\:
+    resource: '../src/Controller'
+    tags: ['controller.service_arguments']
+  parameters:
+    uploads_dir: '%env(resolve:UPLOADS_DIR)%'
