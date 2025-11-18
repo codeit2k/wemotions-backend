@@ -11,7 +11,7 @@ It contains a Symfony-style PHP 8.1+ project skeleton demonstrating:
 - SQL migration (schema.sql)
 - Postman collection for testing
 
-> NOTE: This is a code submission skeleton intended for reviewers. To run it you should install dependencies (Composer) and optionally use Docker.
+
 
 ## Quick steps for grader (high level)
 1. Copy `.env.example` to `.env` and adjust values.
@@ -46,5 +46,5 @@ It contains a Symfony-style PHP 8.1+ project skeleton demonstrating:
 - README, SUBMISSION.md
 
 ## Contact
-Prepared by: [Your Name]
-Submission date: YYYY-MM-DD
+Prepared by: Khushi Singh
+Submission date: 2025-12-18
