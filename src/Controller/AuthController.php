@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Service\ApiResponseService;
 
 class AuthController
 {
@@ -21,41 +20,20 @@ class AuthController
     }
 
     #[Route('/api/auth/register', methods:['POST'])]
-    public function register(Request $request, ApiResponseService $api): JsonResponse
+    public function register(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
-        // Validate fields
         if (empty($data['email']) || empty($data['password'])) {
-
-            [$response, $status] = $api->error(
-                message: 'Email and password are required',
-                statusCode: 400
-            );
-
-            return new JsonResponse($response, $status);
+            return new JsonResponse(['success'=>false,'message'=>'email and password required'], 400);
         }
-
-        // Create user
         $user = new User();
         $user->setEmail($data['email']);
         $user->setPassword($this->hasher->hashPassword($user, $data['password']));
         $user->setRoles(['ROLE_USER']);
-
         $this->em->persist($user);
         $this->em->flush();
-
-        // Success response
-        [$response, $status] = $api->success(
-            data: [
-                'id' => $user->getId(),
-                'email' => $user->getEmail()
-            ],
-            message: 'User registered successfully'
-        );
-
-        return new JsonResponse($response, $status);
+        return new JsonResponse(['success'=>true,'data'=>['id'=>$user->getId()],'message'=>'registered']);
     }
 
-    // NOTE: login normally handled by LexikJWT bundle
+    // NOTE: Login and token issuing typically handled by Lexik bundle endpoints.
 }
