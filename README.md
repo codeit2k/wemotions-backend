@@ -12,6 +12,40 @@ It contains a Symfony-style PHP 8.1+ project skeleton demonstrating:
 - Postman collection for testing
 
 
+API Endpoints Implemented
+Authentication
+Method	Endpoint	Description	Auth
+POST	/api/auth/register	Register a new user	❌
+POST	/api/auth/login	Login & receive JWT token	❌
+
+User Profile & Social
+Method	Endpoint	Description	Auth
+GET	/api/user/me	Get logged-in user profile	✔️
+PUT	/api/user/update	Update user profile	✔️
+DELETE	/api/user/delete	Delete user account	✔️
+POST	/api/user/follow/{id}	Follow another user	✔️
+POST	/api/user/unfollow/{id}	Unfollow a user	✔️
+
+Video Upload & Management
+Method	Endpoint	Description	Auth
+POST	/api/video/upload/init	Initialise chunk upload session	✔️
+POST	/api/video/upload/chunk	Upload a video chunk	✔️
+POST	/api/video/upload/finish	Finalise upload & trigger processing	✔️
+GET	/api/video/{id}	Get video metadata	❌
+DELETE	/api/video/{id}	Delete own video	✔️
+
+Feed
+Method	Endpoint	Description	Auth
+GET	/api/feed/home	Home feed (followed creators)	✔️
+GET	/api/feed/trending	Trending videos	❌
+GET	/api/feed/all	Global feed (cursor-based pagination)	❌
+
+Search & Hashtags
+Method	Endpoint	Description	Auth
+GET	/api/search?q=	Full-text search	❌
+GET	/api/hashtags/trending	Trending hashtags	❌
+
+
 
 ## Quick steps for grader (high level)
 1. Copy `.env.example` to `.env` and adjust values.
