@@ -7,7 +7,7 @@ services:
     volumes:
       - ./:/var/www/html
     ports:
-      - "8000:8000"
+      - "8080:8000"   # host 8080 -> container 8000
     depends_on:
       - mysql
 
@@ -24,3 +24,4 @@ services:
 
 volumes:
   db-data:
+
