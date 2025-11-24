@@ -3,4 +3,3 @@ buildCommand = "composer install --ignore-platform-reqs --no-dev --optimize-auto
 
 [deploy]
 startCommand = "php -S 0.0.0.0:8000 -t public"
-
