@@ -1,0 +1,9 @@
+framework:
+    secret: '%env(APP_SECRET)%'
+    router:
+        utf8: true
+    session:
+        enabled: true
+        handler_id: null
+    default_locale: en
+    csrf_protection: true

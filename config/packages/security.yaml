@@ -1,3 +1,4 @@
+# config/packages/security.yaml
 security:
   password_hashers:
     App\Entity\User:
@@ -10,14 +11,10 @@ security:
         property: email
 
   firewalls:
-    dev:
-      pattern: ^/_(profiler|wdt)
-      security: false
-
     login:
       pattern: ^/api/auth
       stateless: true
-      anonymous: true
+      lazy: true
 
     api:
       pattern: ^/api
