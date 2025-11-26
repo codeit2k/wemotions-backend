@@ -10,9 +10,20 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class JWTCreatedEvent extends Event
 {
-    protected array $header;
-    protected array $data;
-    protected UserInterface $user;
+    /**
+     * @var array
+     */
+    protected $header;
+
+    /**
+     * @var array
+     */
+    protected $data;
+
+    /**
+     * @var UserInterface
+     */
+    protected $user;
 
     public function __construct(array $data, UserInterface $user, array $header = [])
     {
@@ -21,7 +32,10 @@ class JWTCreatedEvent extends Event
         $this->header = $header;
     }
 
-    public function getHeader(): array
+    /**
+     * @return array
+     */
+    public function getHeader()
     {
         return $this->header;
     }
@@ -31,7 +45,10 @@ class JWTCreatedEvent extends Event
         $this->header = $header;
     }
 
-    public function getData(): array
+    /**
+     * @return array
+     */
+    public function getData()
     {
         return $this->data;
     }
@@ -41,7 +58,10 @@ class JWTCreatedEvent extends Event
         $this->data = $data;
     }
 
-    public function getUser(): UserInterface
+    /**
+     * @return UserInterface
+     */
+    public function getUser()
     {
         return $this->user;
     }

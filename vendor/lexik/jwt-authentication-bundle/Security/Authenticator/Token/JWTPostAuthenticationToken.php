@@ -7,7 +7,7 @@ use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 
 class JWTPostAuthenticationToken extends PostAuthenticationToken
 {
-    private string $token;
+    private $token;
 
     public function __construct(UserInterface $user, string $firewallName, array $roles, string $token)
     {

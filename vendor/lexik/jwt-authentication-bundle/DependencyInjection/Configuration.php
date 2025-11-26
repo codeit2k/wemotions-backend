@@ -3,16 +3,20 @@
 namespace Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection;
 
 use ApiPlatform\Symfony\Bundle\ApiPlatformBundle;
+use Symfony\Component\Config\Definition\BaseNode;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * LexikJWTAuthenticationBundle Configuration.
  */
 class Configuration implements ConfigurationInterface
 {
+    public const INVALID_KEY_PATH = "The file %s doesn't exist or is not readable.\nIf the configured encoder doesn't need this to be configured, please don't set this option or leave it null.";
+
     /**
      * {@inheritdoc}
      */
@@ -24,6 +28,14 @@ class Configuration implements ConfigurationInterface
             ->getRootNode()
             ->addDefaultsIfNotSet()
             ->children()
+                ->scalarNode('private_key_path')
+                    ->setDeprecated(...$this->getDeprecationParameters('The "%path%.%node%" configuration key is deprecated since version 2.5. Use "%path%.secret_key" instead.', '2.5'))
+                    ->defaultNull()
+                ->end()
+                ->scalarNode('public_key_path')
+                    ->setDeprecated(...$this->getDeprecationParameters('The "%path%.%node%" configuration key is deprecated since version 2.5. Use "%path%.public_key" instead.', '2.5'))
+                    ->defaultNull()
+                ->end()
                 ->scalarNode('public_key')
                     ->info('The key used to sign tokens (useless for HMAC). If not set, the key will be automatically computed from the secret key.')
                     ->defaultNull()
@@ -60,11 +72,21 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue('RS256')
                             ->cannotBeEmpty()
                         ->end()
+                        ->enumNode('crypto_engine')
+                            ->values(['openssl', 'phpseclib'])
+                            ->defaultValue('openssl')
+                            ->setDeprecated(...$this->getDeprecationParameters('The "%path%.%node%" configuration key is deprecated since version 2.5, built-in encoders support OpenSSL only', '2.5'))
+                        ->end()
                     ->end()
                 ->end()
-                ->scalarNode('user_id_claim')
+                ->scalarNode('user_identity_field')
+                    ->setDeprecated(...$this->getDeprecationParameters('The "%path%.%node%" configuration key is deprecated since version 2.16, use "%path%.user_id_claim" or implement "' . UserInterface::class . '::getUserIdentifier()" instead.', '2.16'))
                     ->defaultValue('username')
                     ->cannotBeEmpty()
+                ->end()
+                ->scalarNode('user_id_claim')
+                    ->defaultNull()
+                    ->info('If null, the user ID claim will have the same name as the one defined by the option "user_identity_field"')
                 ->end()
                 ->append($this->getTokenExtractorsNode())
                 ->scalarNode('remove_token_from_body_when_cookies_used')
@@ -290,5 +312,17 @@ class Configuration implements ConfigurationInterface
         ;
 
         return $node;
+    }
+
+    /**
+     * Returns the correct deprecation parameters for setDeprecated.
+     */
+    private function getDeprecationParameters(string $message, string $version): array
+    {
+        if (method_exists(BaseNode::class, 'getDeprecation')) {
+            return ['lexik/jwt-authentication-bundle', $version, $message];
+        }
+
+        return [$message];
     }
 }

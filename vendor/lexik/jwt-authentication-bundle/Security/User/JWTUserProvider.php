@@ -11,25 +11,28 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 final class JWTUserProvider implements PayloadAwareUserProviderInterface
 {
-    private string $class;
+    private $class;
 
-    private array $cache = [];
+    private $cache = [];
 
     /**
      * @param string $class The {@link JWTUserInterface} implementation FQCN for which to provide instances
      */
-    public function __construct(string $class)
+    public function __construct($class)
     {
         $this->class = $class;
     }
 
     /**
-     * To be removed at the same time as symfony 5.4 support.
+     * {@inheritdoc}
+     *
+     * @param array $payload The JWT payload from which to create an instance
+     *
+     * @return UserInterface
      */
-    public function loadUserByUsername(string $username): UserInterface
+    public function loadUserByUsername($username, array $payload = [])
     {
-        // to be removed at the same time as symfony 5.4 support
-        throw new \LogicException('This method is implemented for BC purpose and should never be called.');
+        return $this->loadUserByUsernameAndPayload($username, $payload);
     }
 
     /**
@@ -42,15 +45,29 @@ final class JWTUserProvider implements PayloadAwareUserProviderInterface
         return $this->loadUserByIdentifierAndPayload($identifier, $payload);
     }
 
-    public function loadUserByIdentifierAndPayload(string $identifier, array $payload): UserInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function loadUserByUsernameAndPayload(string $username, array $payload): UserInterface
     {
-        if (isset($this->cache[$identifier])) {
-            return $this->cache[$identifier];
+        if (isset($this->cache[$username])) {
+            return $this->cache[$username];
         }
 
         $class = $this->class;
 
-        return $this->cache[$identifier] = $class::createFromPayload($identifier, $payload);
+        return $this->cache[$username] = $class::createFromPayload($username, $payload);
+    }
+
+    public function loadUserByIdentifierAndPayload(string $userIdentifier, array $payload): UserInterface
+    {
+        if (isset($this->cache[$userIdentifier])) {
+            return $this->cache[$userIdentifier];
+        }
+
+        $class = $this->class;
+
+        return $this->cache[$userIdentifier] = $class::createFromPayload($userIdentifier, $payload);
     }
 
     /**

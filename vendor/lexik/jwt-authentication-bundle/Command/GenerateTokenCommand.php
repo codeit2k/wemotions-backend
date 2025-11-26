@@ -19,17 +19,22 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 #[AsCommand(name: 'lexik:jwt:generate-token', description: 'Generates a JWT token for a given user.')]
 class GenerateTokenCommand extends Command
 {
-    private JWTTokenManagerInterface $tokenManager;
+    /**
+     * @deprecated
+     */
+    protected static $defaultName = 'lexik:jwt:generate-token';
 
-    /** @var \Traversable<int, UserProviderInterface> */
-    private \Traversable $userProviders;
+    private $tokenManager;
+
+    /** @var \Traversable|UserProviderInterface[] */
+    private $userProviders;
 
     public function __construct(JWTTokenManagerInterface $tokenManager, \Traversable $userProviders)
     {
+        parent::__construct();
+
         $this->tokenManager = $tokenManager;
         $this->userProviders = $userProviders;
-
-        parent::__construct();
     }
 
     /**
@@ -38,6 +43,8 @@ class GenerateTokenCommand extends Command
     protected function configure(): void
     {
         $this
+            ->setName(static::$defaultName)
+            ->setDescription('Generates a JWT token')
             ->addArgument('username', InputArgument::REQUIRED, 'Username of user to be retreived from user provider')
             ->addOption('ttl', 't', InputOption::VALUE_REQUIRED, 'Ttl in seconds to be added to current time. If not provided, the ttl configured in the bundle will be used. Use 0 to generate token without exp')
             ->addOption('user-class', 'c', InputOption::VALUE_REQUIRED, 'Userclass is used to determine which user provider to use')
@@ -46,6 +53,8 @@ class GenerateTokenCommand extends Command
 
     /**
      * {@inheritdoc}
+     *
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -70,14 +79,19 @@ class GenerateTokenCommand extends Command
                 }
             }
 
-            if (null === $userProvider) {
+            if (!$userProvider) {
                 throw new \RuntimeException(sprintf('There is no configured user provider for class "%s".', $userClass));
             }
         }
 
-        $user = $userProvider->loadUserByIdentifier($input->getArgument('username'));
+        if (method_exists($userProvider, 'loadUserByIdentifier')) {
+            $user = $userProvider->loadUserByIdentifier($input->getArgument('username'));
+        } else {
+            $user = $userProvider->loadUserByUsername($input->getArgument('username'));
+        }
 
         $payload = [];
+
         if (null !== $input->getOption('ttl') && ((int) $input->getOption('ttl')) == 0) {
             $payload['exp'] = 0;
         } elseif (null !== $input->getOption('ttl') && ((int) $input->getOption('ttl')) > 0) {
@@ -92,6 +106,6 @@ class GenerateTokenCommand extends Command
             '',
         ]);
 
-        return Command::SUCCESS;
+        return 0;
     }
 }

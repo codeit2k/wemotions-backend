@@ -11,8 +11,15 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class JWTDecodedEvent extends Event
 {
-    protected array $payload;
-    protected bool $isValid;
+    /**
+     * @var array
+     */
+    protected $payload;
+
+    /**
+     * @var bool
+     */
+    protected $isValid;
 
     public function __construct(array $payload)
     {
@@ -20,7 +27,10 @@ class JWTDecodedEvent extends Event
         $this->isValid = true;
     }
 
-    public function getPayload(): array
+    /**
+     * @return array
+     */
+    public function getPayload()
     {
         return $this->payload;
     }
@@ -33,13 +43,16 @@ class JWTDecodedEvent extends Event
     /**
      * Mark payload as invalid.
      */
-    public function markAsInvalid(): void
+    public function markAsInvalid()
     {
         $this->isValid = false;
         $this->stopPropagation();
     }
 
-    public function isValid(): bool
+    /**
+     * @return bool
+     */
+    public function isValid()
     {
         return $this->isValid;
     }

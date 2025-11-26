@@ -17,10 +17,15 @@ use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
 final class AccessTokenLoader
 {
     private $jwsLoader;
+
     private $jwsHeaderCheckerManager;
+
     private $claimCheckerManager;
+
     private $jweLoader;
+
     private $signatureKeyset;
+
     private $encryptionKeyset;
 
     /**
@@ -46,7 +51,7 @@ final class AccessTokenLoader
         ?string                     $encryptionKeyset
     ) {
         $this->jwsLoader = $jwsLoaderFactory->create(['jws_compact'], $signatureAlgorithms, $jwsHeaderChecker);
-        if ($jweLoaderFactory !== null && !empty($keyEncryptionAlgorithms) && !empty($contentEncryptionAlgorithms) && !empty($jweHeaderChecker)) {
+        if ($jweLoaderFactory !== null && $keyEncryptionAlgorithms !== null && $contentEncryptionAlgorithms !== null && $jweHeaderChecker !== null) {
             $this->jweLoader = $jweLoaderFactory->create(['jwe_compact'], array_merge($keyEncryptionAlgorithms, $contentEncryptionAlgorithms), null, null, $jweHeaderChecker);
             $this->continueOnDecryptionFailure = $continueOnDecryptionFailure;
         }

@@ -15,9 +15,20 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class AuthenticationFailureEvent extends Event
 {
-    protected AuthenticationException $exception;
-    protected ?Response $response;
-    protected ?Request $request;
+    /**
+     * @var AuthenticationException
+     */
+    protected $exception;
+
+    /**
+     * @var Response
+     */
+    protected $response;
+
+    /**
+     * @var Request|null
+     */
+    protected $request;
 
     public function __construct(?AuthenticationException $exception, ?Response $response, ?Request $request = null)
     {
@@ -26,12 +37,18 @@ class AuthenticationFailureEvent extends Event
         $this->request = $request;
     }
 
-    public function getException(): AuthenticationException
+    /**
+     * @return AuthenticationException
+     */
+    public function getException()
     {
         return $this->exception;
     }
 
-    public function getResponse(): ?Response
+    /**
+     * @return Response
+     */
+    public function getResponse()
     {
         return $this->response;
     }

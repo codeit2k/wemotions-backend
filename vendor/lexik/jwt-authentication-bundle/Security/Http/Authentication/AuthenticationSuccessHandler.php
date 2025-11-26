@@ -24,15 +24,16 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
-    protected JWTTokenManagerInterface $jwtManager;
-    protected EventDispatcherInterface $dispatcher;
-    protected bool $removeTokenFromBodyWhenCookiesUsed;
-    private iterable $cookieProviders;
+    private $cookieProviders;
+
+    protected $jwtManager;
+    protected $dispatcher;
+    protected $removeTokenFromBodyWhenCookiesUsed;
 
     /**
      * @param iterable|JWTCookieProvider[] $cookieProviders
      */
-    public function __construct(JWTTokenManagerInterface $jwtManager, EventDispatcherInterface $dispatcher, iterable $cookieProviders = [], bool $removeTokenFromBodyWhenCookiesUsed = true)
+    public function __construct(JWTTokenManagerInterface $jwtManager, EventDispatcherInterface $dispatcher, $cookieProviders = [], bool $removeTokenFromBodyWhenCookiesUsed = true)
     {
         $this->jwtManager = $jwtManager;
         $this->dispatcher = $dispatcher;
@@ -48,7 +49,10 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
         return $this->handleAuthenticationSuccess($token->getUser());
     }
 
-    public function handleAuthenticationSuccess(UserInterface $user, $jwt = null): Response
+    /**
+     * @return Response
+     */
+    public function handleAuthenticationSuccess(UserInterface $user, $jwt = null)
     {
         if (null === $jwt) {
             $jwt = $this->jwtManager->create($user);
@@ -72,7 +76,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
         if ($responseData) {
             $response->setData($responseData);
         } else {
-            $response->setStatusCode(Response::HTTP_NO_CONTENT);
+            $response->setStatusCode(JWTAuthenticationSuccessResponse::HTTP_NO_CONTENT);
         }
 
         return $response;

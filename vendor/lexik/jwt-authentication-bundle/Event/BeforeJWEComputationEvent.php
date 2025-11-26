@@ -10,17 +10,20 @@ namespace Lexik\Bundle\JWTAuthenticationBundle\Event;
  */
 class BeforeJWEComputationEvent
 {
+    /**
+     * @var array<string, mixed>
+     */
     private $header;
 
-    /**
-     * @param array<string, mixed> $header
-     */
     public function __construct(array $header)
     {
         $this->header = $header;
     }
 
-    public function setHeader(string $key, mixed $value): self
+    /**
+     * @param mixed $value
+     */
+    public function setHeader(string $key, $value): self
     {
         $this->header[$key] = $value;
 

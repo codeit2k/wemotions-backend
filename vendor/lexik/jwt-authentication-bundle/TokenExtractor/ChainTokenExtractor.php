@@ -15,7 +15,10 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ChainTokenExtractor implements \IteratorAggregate, TokenExtractorInterface
 {
-    private array $map;
+    /**
+     * @var array
+     */
+    private $map;
 
     public function __construct(array $map)
     {
@@ -79,7 +82,7 @@ class ChainTokenExtractor implements \IteratorAggregate, TokenExtractorInterface
     /**
      * Iterates over the mapped token extractors while generating them.
      *
-     * @return \Traversable<int, TokenExtractorInterface>
+     * @return \Traversable|TokenExtractorInterface[]
      */
     #[\ReturnTypeWillChange]
     public function getIterator()

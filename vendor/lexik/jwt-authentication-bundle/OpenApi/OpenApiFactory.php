@@ -19,10 +19,14 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class OpenApiFactory implements OpenApiFactoryInterface
 {
-    private OpenApiFactoryInterface $decorated;
-    private string $checkPath;
-    private string $usernamePath;
-    private string $passwordPath;
+    /**
+     * @var OpenApiFactoryInterface
+     */
+    private $decorated;
+
+    private $checkPath;
+    private $usernamePath;
+    private $passwordPath;
 
     public function __construct(OpenApiFactoryInterface $decorated, string $checkPath, string $usernamePath, string $passwordPath)
     {

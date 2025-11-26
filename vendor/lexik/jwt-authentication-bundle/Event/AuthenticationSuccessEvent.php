@@ -13,9 +13,20 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class AuthenticationSuccessEvent extends Event
 {
-    protected array $data;
-    protected UserInterface $user;
-    protected Response $response;
+    /**
+     * @var array
+     */
+    protected $data;
+
+    /**
+     * @var UserInterface
+     */
+    protected $user;
+
+    /**
+     * @var Response
+     */
+    protected $response;
 
     public function __construct(array $data, UserInterface $user, Response $response)
     {
@@ -24,22 +35,31 @@ class AuthenticationSuccessEvent extends Event
         $this->response = $response;
     }
 
-    public function getData(): array
+    /**
+     * @return array
+     */
+    public function getData()
     {
         return $this->data;
     }
 
-    public function setData(array $data): void
+    public function setData(array $data)
     {
         $this->data = $data;
     }
 
-    public function getUser(): UserInterface
+    /**
+     * @return UserInterface
+     */
+    public function getUser()
     {
         return $this->user;
     }
 
-    public function getResponse(): Response
+    /**
+     * @return Response
+     */
+    public function getResponse()
     {
         return $this->response;
     }

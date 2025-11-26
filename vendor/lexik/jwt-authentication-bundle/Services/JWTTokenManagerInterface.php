@@ -12,6 +12,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @author Robin Chalas <robin.chalas@gmail.com>
  * @author Eric Lannez <eric.lannez@gmail.com>
+ *
+ * @method string createFromPayload(UserInterface $user, array $payload = []);
+ * @method array parse(string $token) Parses a raw JWT token and returns its payload
  */
 interface JWTTokenManagerInterface
 {
@@ -20,18 +23,29 @@ interface JWTTokenManagerInterface
      */
     public function create(UserInterface $user);
 
-    public function createFromPayload(UserInterface $user, array $payload = []): string;
-
     /**
      * @return array|false The JWT token payload or false if an error occurs
      * @throws JWTDecodeFailureException
      */
-    public function decode(TokenInterface $token): array|bool;
+    public function decode(TokenInterface $token);
 
     /**
-     * Parses a raw JWT token and returns its payload
+     * Sets the field used as identifier to load an user from a JWT payload.
+     *
+     * @param string $field
+     *
+     * @deprecated since 2.15, use {@see UserInterface::getUserIdentifier()} instead
      */
-    public function parse(string $token): array;
+    public function setUserIdentityField($field);
+
+    /**
+     * Returns the field used as identifier to load an user from a JWT payload.
+     *
+     * @return string
+     *
+     * @deprecated since 2.15, use {@see UserInterface::getUserIdentifier()} instead
+     */
+    public function getUserIdentityField();
 
     /**
      * Returns the claim used as identifier to load an user from a JWT payload.

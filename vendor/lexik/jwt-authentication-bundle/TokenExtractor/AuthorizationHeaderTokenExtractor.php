@@ -11,11 +11,21 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class AuthorizationHeaderTokenExtractor implements TokenExtractorInterface
 {
-    protected ?string $prefix;
+    /**
+     * @var string
+     */
+    protected $prefix;
 
-    protected string $name;
+    /**
+     * @var string
+     */
+    protected $name;
 
-    public function __construct(?string $prefix, string $name)
+    /**
+     * @param string|null $prefix
+     * @param string      $name
+     */
+    public function __construct($prefix, $name)
     {
         $this->prefix = $prefix;
         $this->name = $name;

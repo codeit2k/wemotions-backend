@@ -6,14 +6,14 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class JWTEncodedEvent extends Event
 {
-    private string $jwtString;
+    private $jwtString;
 
     public function __construct(string $jwtString)
     {
         $this->jwtString = $jwtString;
     }
 
-    public function getJWTString(): string
+    public function getJWTString()
     {
         return $this->jwtString;
     }

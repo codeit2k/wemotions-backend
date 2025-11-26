@@ -14,11 +14,11 @@ final class LoadedJWS
     public const EXPIRED = 'expired';
     public const INVALID = 'invalid';
 
-    private array $header;
-    private array $payload;
-    private ?string $state = null;
-    private int $clockSkew;
-    private bool $shouldCheckExpiration;
+    private $header;
+    private $payload;
+    private $state;
+    private $clockSkew;
+    private $shouldCheckExpiration;
 
     public function __construct(array $payload, bool $isVerified, bool $shouldCheckExpiration = true, array $header = [], int $clockSkew = 0)
     {
@@ -82,10 +82,10 @@ final class LoadedJWS
     /**
      * Ensures that the iat claim is not in the future.
      */
-    private function checkIssuedAt(): void
+    private function checkIssuedAt()
     {
         if (isset($this->payload['iat']) && (int) $this->payload['iat'] - $this->clockSkew > time()) {
-            $this->state = self::INVALID;
+            return $this->state = self::INVALID;
         }
     }
 }
