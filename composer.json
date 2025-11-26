@@ -21,7 +21,8 @@
     "twig/twig": "^3.22",
     "symfony/twig-bundle": "^7.2",
     "doctrine/doctrine-migrations-bundle": "^3.7",
-    "symfony/orm-pack": "^2.5"
+    "symfony/orm-pack": "^2.5",
+    "symfony/*": "^7.2"
   },
   "autoload": {
     "psr-4": {
