@@ -43,11 +43,10 @@ final class AccessTokenFactory extends AbstractFactory implements StatelessAuthe
     {
         parent::addConfiguration($node);
 
-        $builder = $node->children();
+        $builder = $node->fixXmlConfig('token_extractor')->children();
         $builder
             ->scalarNode('realm')->defaultNull()->end()
             ->arrayNode('token_extractors')
-                ->fixXmlConfig('token_extractors')
                 ->beforeNormalization()
                     ->ifString()
                     ->then(fn ($v) => [$v])
@@ -107,7 +106,7 @@ final class AccessTokenFactory extends AbstractFactory implements StatelessAuthe
     {
         $successHandler = isset($config['success_handler']) ? new Reference($this->createAuthenticationSuccessHandler($container, $firewallName, $config)) : null;
         $failureHandler = isset($config['failure_handler']) ? new Reference($this->createAuthenticationFailureHandler($container, $firewallName, $config)) : null;
-        $authenticatorId = sprintf('security.authenticator.access_token.%s', $firewallName);
+        $authenticatorId = \sprintf('security.authenticator.access_token.%s', $firewallName);
         $extractorId = $this->createExtractor($container, $firewallName, $config['token_extractors']);
         $tokenHandlerId = $this->createTokenHandler($container, $firewallName, $config['token_handler'], $userProviderId);
 
@@ -139,7 +138,7 @@ final class AccessTokenFactory extends AbstractFactory implements StatelessAuthe
         if (1 === \count($extractors)) {
             return current($extractors);
         }
-        $extractorId = sprintf('security.authenticator.access_token.chain_extractor.%s', $firewallName);
+        $extractorId = \sprintf('security.authenticator.access_token.chain_extractor.%s', $firewallName);
         $container
             ->setDefinition($extractorId, new ChildDefinition('security.authenticator.access_token.chain_extractor'))
             ->replaceArgument(0, array_map(fn (string $extractorId): Reference => new Reference($extractorId), $extractors))
@@ -151,7 +150,7 @@ final class AccessTokenFactory extends AbstractFactory implements StatelessAuthe
     private function createTokenHandler(ContainerBuilder $container, string $firewallName, array $config, ?string $userProviderId): string
     {
         $key = array_keys($config)[0];
-        $id = sprintf('security.access_token_handler.%s', $firewallName);
+        $id = \sprintf('security.access_token_handler.%s', $firewallName);
 
         foreach ($this->tokenHandlerFactories as $factory) {
             if ($key !== $factory->getKey()) {

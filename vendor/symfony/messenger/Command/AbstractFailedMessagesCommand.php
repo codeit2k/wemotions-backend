@@ -45,17 +45,11 @@ abstract class AbstractFailedMessagesCommand extends Command
 {
     protected const DEFAULT_TRANSPORT_OPTION = 'choose';
 
-    protected ServiceProviderInterface $failureTransports;
-    protected ?PhpSerializer $phpSerializer;
-
-    private ?string $globalFailureReceiverName;
-
-    public function __construct(?string $globalFailureReceiverName, ServiceProviderInterface $failureTransports, ?PhpSerializer $phpSerializer = null)
-    {
-        $this->failureTransports = $failureTransports;
-        $this->globalFailureReceiverName = $globalFailureReceiverName;
-        $this->phpSerializer = $phpSerializer;
-
+    public function __construct(
+        private ?string $globalFailureReceiverName,
+        protected ServiceProviderInterface $failureTransports,
+        protected ?PhpSerializer $phpSerializer = null,
+    ) {
         parent::__construct();
     }
 
@@ -190,6 +184,7 @@ abstract class AbstractFailedMessagesCommand extends Command
                 Caster::PREFIX_VIRTUAL.'file' => $flattenException->getFile(),
                 Caster::PREFIX_VIRTUAL.'line' => $flattenException->getLine(),
                 Caster::PREFIX_VIRTUAL.'trace' => new TraceStub($flattenException->getTrace()),
+                Caster::PREFIX_VIRTUAL.'previous' => $flattenException->getPrevious(),
             ];
         }]);
 
@@ -241,8 +236,6 @@ abstract class AbstractFailedMessagesCommand extends Command
                 $ids[] = $this->getMessageId($envelope);
             }
             $suggestions->suggestValues($ids);
-
-            return;
         }
     }
 }

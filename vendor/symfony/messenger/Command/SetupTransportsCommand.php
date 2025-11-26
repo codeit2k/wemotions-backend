@@ -28,21 +28,14 @@ use Symfony\Component\Messenger\Transport\SetupableTransportInterface;
 #[AsCommand(name: 'messenger:setup-transports', description: 'Prepare the required infrastructure for the transport')]
 class SetupTransportsCommand extends Command
 {
-    private ContainerInterface $transportLocator;
-    private array $transportNames;
-
-    public function __construct(ContainerInterface $transportLocator, array $transportNames = [])
-    {
-        $this->transportLocator = $transportLocator;
-        $this->transportNames = $transportNames;
-
+    public function __construct(
+        private ContainerInterface $transportLocator,
+        private array $transportNames = [],
+    ) {
         parent::__construct();
     }
 
-    /**
-     * @return void
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->addArgument('transport', InputArgument::OPTIONAL, 'Name of the transport to setup', null)
@@ -94,8 +87,6 @@ EOF
     {
         if ($input->mustSuggestArgumentValuesFor('transport')) {
             $suggestions->suggestValues($this->transportNames);
-
-            return;
         }
     }
 }
