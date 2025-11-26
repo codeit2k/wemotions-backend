@@ -13,4 +13,3 @@ class DefaultController extends AbstractController
         return new Response('<h1>Symfony is working! - Khushi Singh</h1>');
     }
 }
-

@@ -3,7 +3,7 @@
         'name' => 'wemotions/backend',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '78fb351cd603dc76223e108fac49f756b21b27cc',
+        'reference' => 'a1b2dd7a5d7a1fb3da4cd571ff5c301c4194b760',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -733,7 +733,7 @@
         'wemotions/backend' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '78fb351cd603dc76223e108fac49f756b21b27cc',
+            'reference' => 'a1b2dd7a5d7a1fb3da4cd571ff5c301c4194b760',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
