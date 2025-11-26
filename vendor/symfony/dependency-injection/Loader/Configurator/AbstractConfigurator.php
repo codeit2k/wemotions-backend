@@ -29,12 +29,15 @@ abstract class AbstractConfigurator
     /**
      * @var \Closure(mixed, bool):mixed|null
      */
-    public static ?\Closure $valuePreProcessor = null;
+    public static $valuePreProcessor;
 
     /** @internal */
     protected Definition|Alias|null $definition = null;
 
-    public function __call(string $method, array $args): mixed
+    /**
+     * @return mixed
+     */
+    public function __call(string $method, array $args)
     {
         if (method_exists($this, 'set'.$method)) {
             return $this->{'set'.$method}(...$args);
