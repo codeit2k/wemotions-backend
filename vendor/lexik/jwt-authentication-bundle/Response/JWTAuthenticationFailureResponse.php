@@ -3,6 +3,7 @@
 namespace Lexik\Bundle\JWTAuthenticationBundle\Response;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * JWTAuthenticationFailureResponse.
@@ -11,11 +12,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @author Robin Chalas <robin.chalas@gmail.com>
  */
-final class JWTAuthenticationFailureResponse extends JWTCompatAuthenticationFailureResponse
+final class JWTAuthenticationFailureResponse extends JsonResponse
 {
-    private $message;
+    private string $message;
 
-    public function __construct(string $message = 'Bad credentials', int $statusCode = JsonResponse::HTTP_UNAUTHORIZED)
+    public function __construct(string $message = 'Bad credentials', int $statusCode = Response::HTTP_UNAUTHORIZED)
     {
         $this->message = $message;
 
@@ -23,13 +24,17 @@ final class JWTAuthenticationFailureResponse extends JWTCompatAuthenticationFail
     }
 
     /**
-     * Sets the failure message.
-     *
-     * @param string $message
-     *
-     * @return JWTAuthenticationFailureResponse
+     * Sets the response data with the statusCode & message included.
      */
-    public function setMessage($message)
+    public function setData(mixed $data = []): static
+    {
+        return parent::setData((array)$data + ["code" => $this->statusCode, "message" => $this->getMessage()]);
+    }
+
+    /**
+     * Sets the failure message.
+     */
+    public function setMessage(string $message): JWTAuthenticationFailureResponse
     {
         $this->message = $message;
 
@@ -40,10 +45,8 @@ final class JWTAuthenticationFailureResponse extends JWTCompatAuthenticationFail
 
     /**
      * Gets the failure message.
-     *
-     * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }

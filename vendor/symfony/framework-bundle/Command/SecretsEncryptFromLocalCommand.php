@@ -61,13 +61,14 @@ EOF
         }
 
         foreach ($this->vault->list(true) as $name => $value) {
-            if (null === $localValue = $this->localVault->reveal($name)) {
-                continue;
-            }
+            $localValue = $this->localVault->reveal($name);
 
-            if ($value !== $localValue) {
+            if (null !== $localValue && $value !== $localValue) {
                 $this->vault->seal($name, $localValue);
-                $io->note($this->vault->getLastMessage());
+            } elseif (null !== $message = $this->localVault->getLastMessage()) {
+                $io->error($message);
+
+                return 1;
             }
         }
 

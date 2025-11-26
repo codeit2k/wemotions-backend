@@ -14,17 +14,11 @@ interface JWSProviderInterface
 {
     /**
      * Creates a new JWS signature from a given payload.
-     *
-     * @return CreatedJWS
      */
-    public function create(array $payload, array $header = []);
+    public function create(array $payload, array $header = []): CreatedJWS;
 
     /**
      * Loads an existing JWS signature from a given JWT token.
-     *
-     * @param string $token
-     *
-     * @return LoadedJWS
      */
-    public function load($token);
+    public function load(string $token): LoadedJWS;
 }

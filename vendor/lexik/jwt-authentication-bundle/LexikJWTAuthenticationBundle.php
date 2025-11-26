@@ -4,16 +4,10 @@ namespace Lexik\Bundle\JWTAuthenticationBundle;
 
 use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Compiler\ApiPlatformOpenApiPass;
 use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Compiler\CollectPayloadEnrichmentsPass;
-use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Compiler\DeprecateLegacyGuardAuthenticatorPass;
-use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Compiler\RegisterLegacyGuardAuthenticatorPass;
 use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Compiler\WireGenerateTokenCommandPass;
 use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Security\Factory\JWTAuthenticatorFactory;
-use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Security\Factory\JWTFactory;
-use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Security\Factory\JWTSecurityFactory;
 use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Security\Factory\JWTUserFactory;
-use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
-use Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -33,7 +27,6 @@ class LexikJWTAuthenticationBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new WireGenerateTokenCommandPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 0);
-        $container->addCompilerPass(new DeprecateLegacyGuardAuthenticatorPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 0);
         $container->addCompilerPass(new ApiPlatformOpenApiPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 0);
         $container->addCompilerPass(new CollectPayloadEnrichmentsPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 0);
 
@@ -42,23 +35,6 @@ class LexikJWTAuthenticationBundle extends Bundle
 
         $extension->addUserProviderFactory(new JWTUserFactory());
 
-        // Authenticator factory for Symfony 5.4 and later
-        if (method_exists($extension, 'addAuthenticatorFactory')) {
-            $extension->addAuthenticatorFactory(new JWTAuthenticatorFactory());
-
-            return;
-        }
-
-        // Security listener factory for Symfony 5.3 and earlier
-        if (method_exists($extension, 'addSecurityListenerFactory')) {
-            $extension->addSecurityListenerFactory(new JWTAuthenticatorFactory());
-
-            return;
-        }
-
-        // Security listener factory for Symfony 4.4
-        if (method_exists($extension, 'addSecurityListenerFactory')) {
-            $extension->addSecurityListenerFactory(new JWTFactory(false)); // BC 1.x, to be removed in 3.0
-        }
+        $extension->addAuthenticatorFactory(new JWTAuthenticatorFactory());
     }
 }

@@ -29,10 +29,7 @@ use Symfony\Component\DependencyInjection\TypedReference;
  */
 class AddConsoleCommandPass implements CompilerPassInterface
 {
-    /**
-     * @return void
-     */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $commandServices = $container->findTaggedServiceIds('console.command', true);
         $lazyCommandMap = [];
@@ -56,7 +53,7 @@ class AddConsoleCommandPass implements CompilerPassInterface
                 $aliases = str_replace('%', '%%', $class::getDefaultName() ?? '');
             }
 
-            $aliases = explode('|', $aliases ?? '');
+            $aliases = explode('|', $aliases);
             $commandName = array_shift($aliases);
 
             if ($isHidden = '' === $commandName) {

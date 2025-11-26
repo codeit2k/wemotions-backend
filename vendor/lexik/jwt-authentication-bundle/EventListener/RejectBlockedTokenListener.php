@@ -17,7 +17,7 @@ class RejectBlockedTokenListener
     }
 
     /**
-     * @throws InvalidTokenException if the JWT is blocked
+     * @throws InvalidTokenException If the JWT is blocked
      */
     public function __invoke(JWTAuthenticatedEvent $event): void
     {
@@ -25,7 +25,7 @@ class RejectBlockedTokenListener
             if ($this->blockedTokenManager->has($event->getPayload())) {
                 throw new InvalidTokenException('JWT blocked');
             }
-        } catch (MissingClaimException $e) {
+        } catch (MissingClaimException) {
             // Do nothing if the required claims do not exist on the payload (older JWTs won't have the "jti" claim the manager requires)
         }
     }

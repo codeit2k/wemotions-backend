@@ -24,10 +24,9 @@ use Symfony\Component\Translation\Translator as BaseTranslator;
  */
 class Translator extends BaseTranslator implements WarmableInterface
 {
-    protected $container;
-    protected $loaderIds;
-
-    protected $options = [
+    protected ContainerInterface $container;
+    protected array $loaderIds;
+    protected array $options = [
         'cache_dir' => null,
         'debug' => false,
         'resource_files' => [],
@@ -83,7 +82,7 @@ class Translator extends BaseTranslator implements WarmableInterface
 
         // check option names
         if ($diff = array_diff(array_keys($options), array_keys($this->options))) {
-            throw new InvalidArgumentException(\sprintf('The Translator does not support the following options: \'%s\'.', implode('\', \'', $diff)));
+            throw new InvalidArgumentException(sprintf('The Translator does not support the following options: \'%s\'.', implode('\', \'', $diff)));
         }
 
         $this->options = array_merge($this->options, $options);
@@ -94,10 +93,7 @@ class Translator extends BaseTranslator implements WarmableInterface
         parent::__construct($defaultLocale, $formatter, $this->options['cache_dir'], $this->options['debug'], $this->options['cache_vary']);
     }
 
-    /**
-     * @param string|null $buildDir
-     */
-    public function warmUp(string $cacheDir /* , string $buildDir = null */): array
+    public function warmUp(string $cacheDir, ?string $buildDir = null): array
     {
         // skip warmUp when translator doesn't use cache
         if (null === $this->options['cache_dir']) {
@@ -145,10 +141,7 @@ class Translator extends BaseTranslator implements WarmableInterface
         }
     }
 
-    /**
-     * @return void
-     */
-    protected function initialize()
+    protected function initialize(): void
     {
         if ($this->resourceFiles) {
             $this->addResourceFiles();

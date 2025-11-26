@@ -6,15 +6,10 @@ namespace Lexik\Bundle\JWTAuthenticationBundle\Services\KeyLoader;
  * Interface for classes that are able to load crypto keys.
  *
  * @author Robin Chalas <robin.chalas@gmail.com>
- *
- * @method string|null getPublicKey()
- * @method string|null getSigningKey()
- * @method array getAdditionalPublicKeys()
  */
 interface KeyLoaderInterface
 {
     public const TYPE_PUBLIC = 'public';
-
     public const TYPE_PRIVATE = 'private';
 
     /**
@@ -26,8 +21,11 @@ interface KeyLoaderInterface
      */
     public function loadKey($type);
 
-    /**
-     * @return string|null
-     */
-    public function getPassphrase();
+    public function getPassphrase(): ?string;
+
+    public function getSigningKey(): ?string;
+
+    public function getPublicKey(): ?string;
+
+    public function getAdditionalPublicKeys(): array;
 }

@@ -11,15 +11,15 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 final class JWTCookieProvider
 {
-    private $defaultName;
-    private $defaultLifetime;
-    private $defaultSameSite;
-    private $defaultPath;
-    private $defaultDomain;
-    private $defaultSecure;
-    private $defaultHttpOnly;
-    private $defaultSplit;
-    private $defaultPartitioned;
+    private ?string $defaultName;
+    private ?int $defaultLifetime;
+    private ?string $defaultSameSite;
+    private ?string $defaultPath;
+    private ?string $defaultDomain;
+    private bool $defaultSecure;
+    private bool $defaultHttpOnly;
+    private array $defaultSplit;
+    private bool $defaultPartitioned;
 
     public function __construct(?string $defaultName = null, ?int $defaultLifetime = 0, ?string $defaultSameSite = Cookie::SAMESITE_LAX, ?string $defaultPath = '/', ?string $defaultDomain = null, bool $defaultSecure = true, bool $defaultHttpOnly = true, array $defaultSplit = [], bool $defaultPartitioned = false)
     {
@@ -71,11 +71,11 @@ final class JWTCookieProvider
             $expiresAt,
             $path ?: $this->defaultPath,
             $domain ?: $this->defaultDomain,
-            $secure ?: $this->defaultSecure,
-            $httpOnly ?: $this->defaultHttpOnly,
+            $secure ?? $this->defaultSecure,
+            $httpOnly ?? $this->defaultHttpOnly,
             false,
             $sameSite ?: $this->defaultSameSite,
-            $partitioned ?: $this->defaultPartitioned
+            $partitioned ?? $this->defaultPartitioned
         );
     }
 }

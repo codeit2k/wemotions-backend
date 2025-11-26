@@ -19,17 +19,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class AuthenticationFailureHandler implements AuthenticationFailureHandlerInterface
 {
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $dispatcher;
+    protected EventDispatcherInterface $dispatcher;
+    private ?TranslatorInterface $translator;
 
-    /**
-     * @var TranslatorInterface|null
-     */
-    private $translator;
-
-    public function __construct(EventDispatcherInterface $dispatcher, TranslatorInterface $translator = null)
+    public function __construct(EventDispatcherInterface $dispatcher, ?TranslatorInterface $translator = null)
     {
         $this->dispatcher = $dispatcher;
         $this->translator = $translator;

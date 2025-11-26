@@ -23,7 +23,6 @@
         <xsd:attribute name="hide-user-not-found" type="xsd:boolean" />
         <xsd:attribute name="always-authenticate-before-granting" type="xsd:boolean" />
         <xsd:attribute name="erase-credentials" type="xsd:boolean" />
-        <xsd:attribute name="enable-authenticator-manager" type="xsd:boolean" />
     </xsd:complexType>
 
     <xsd:complexType name="password_hashers">
@@ -92,7 +91,7 @@
             <xsd:element name="memory" type="memory" />
             <xsd:element name="ldap" type="ldap" />
             <!-- allow factories to use dynamic elements -->
-            <xsd:any processContents="lax" namespace="##other" />
+            <xsd:any processContents="lax" />
         </xsd:choice>
         <xsd:attribute name="name" type="xsd:string" use="required" />
         <xsd:attribute name="id" type="xsd:string" />
@@ -151,7 +150,7 @@
             <xsd:element name="x509" type="x509" minOccurs="0" maxOccurs="1" />
             <xsd:element name="required-badge" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
             <!-- allow factories to use dynamic elements -->
-            <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded" namespace="##other" />
+            <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded" />
         </xsd:choice>
         <xsd:attribute name="name" type="xsd:string" use="required" />
         <xsd:attribute name="pattern" type="xsd:string" />
@@ -177,7 +176,6 @@
             <xsd:element name="clear-site-data" type="clear_site_data" minOccurs="0" maxOccurs="unbounded" />
         </xsd:choice>
         <xsd:attribute name="csrf-parameter" type="xsd:string" />
-        <xsd:attribute name="csrf-token-generator" type="xsd:string" />
         <xsd:attribute name="csrf-token-manager" type="xsd:string" />
         <xsd:attribute name="csrf-token-id" type="xsd:string" />
         <xsd:attribute name="enable-csrf" type="xsd:boolean" />

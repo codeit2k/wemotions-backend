@@ -53,7 +53,7 @@ class Router extends BaseRouter implements WarmableInterface, ServiceSubscriberI
         } elseif ($container instanceof SymfonyContainerInterface) {
             $this->paramFetcher = $container->getParameter(...);
         } else {
-            throw new \LogicException(\sprintf('You should either pass a "%s" instance or provide the $parameters argument of the "%s" method.', SymfonyContainerInterface::class, __METHOD__));
+            throw new \LogicException(sprintf('You should either pass a "%s" instance or provide the $parameters argument of the "%s" method.', SymfonyContainerInterface::class, __METHOD__));
         }
 
         $this->defaultLocale = $defaultLocale;
@@ -80,10 +80,7 @@ class Router extends BaseRouter implements WarmableInterface, ServiceSubscriberI
         return $this->collection;
     }
 
-    /**
-     * @param string|null $buildDir
-     */
-    public function warmUp(string $cacheDir /* , string $buildDir = null */): array
+    public function warmUp(string $cacheDir, ?string $buildDir = null): array
     {
         $currentDir = $this->getOption('cache_dir');
 
@@ -165,7 +162,7 @@ class Router extends BaseRouter implements WarmableInterface, ServiceSubscriberI
             }
 
             if (preg_match('/^env\((?:\w++:)*+\w++\)$/', $match[1])) {
-                throw new RuntimeException(\sprintf('Using "%%%s%%" is not allowed in routing configuration.', $match[1]));
+                throw new RuntimeException(sprintf('Using "%%%s%%" is not allowed in routing configuration.', $match[1]));
             }
 
             $resolved = ($this->paramFetcher)($match[1]);
@@ -182,7 +179,7 @@ class Router extends BaseRouter implements WarmableInterface, ServiceSubscriberI
                 }
             }
 
-            throw new RuntimeException(\sprintf('The container parameter "%s", used in the route configuration value "%s", must be a string or numeric, but it is of type "%s".', $match[1], $value, get_debug_type($resolved)));
+            throw new RuntimeException(sprintf('The container parameter "%s", used in the route configuration value "%s", must be a string or numeric, but it is of type "%s".', $match[1], $value, get_debug_type($resolved)));
         }, $value);
 
         return str_replace('%%', '%', $escapedValue);

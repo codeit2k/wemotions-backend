@@ -3,17 +3,33 @@
   "type": "project",
   "require": {
     "php": ">=8.1",
-    "symfony/framework-bundle": "^6.0",
-    "symfony/security-bundle": "^6.0",
-    "doctrine/orm": "^2.14",
+    "symfony/framework-bundle": "^7.0",
+    "symfony/security-bundle": "^7.0",
+    "doctrine/orm": "^3.5",
     "doctrine/migrations": "^3.5",
-    "lexik/jwt-authentication-bundle": "^2.18",
+    "lexik/jwt-authentication-bundle": "^3.1",
     "symfony/messenger": "^6.0",
-    "symfony/serializer": "^6.0"
+    "symfony/serializer": "^6.0",
+    "symfony/yaml": "^7.3",
+    "symfony/dotenv": "^7.3",
+    "doctrine/doctrine-bundle": "^2.18",
+    "symfony/doctrine-bridge": "^7.3",
+    "symfony/console": "^7.2",
+    "symfony/dependency-injection": "^7.3",
+    "symfony/config": "^7.0",
+    "symfony/routing": "^7.3",
+    "twig/twig": "^3.22",
+    "symfony/twig-bundle": "^7.2",
+    "doctrine/doctrine-migrations-bundle": "^3.7",
+    "symfony/orm-pack": "^2.5"
   },
   "autoload": {
     "psr-4": {
       "App\\": "src/"
     }
+  },
+  "require-dev": {
+    "symfony/debug-bundle": "^7.2",
+    "symfony/web-profiler-bundle": "^7.1"
   }
 }

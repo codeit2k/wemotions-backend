@@ -14,9 +14,10 @@ namespace Symfony\Bundle\FrameworkBundle\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpClient\DataCollector\HttpClientDataCollector;
 
-/**
+/*
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
  */
+
 trait HttpClientAssertionsTrait
 {
     public static function assertHttpClientRequest(string $expectedUrl, string $expectedMethod = 'GET', string|array|null $expectedBody = null, array $expectedHeaders = [], string $httpClientId = 'http_client'): void
@@ -33,7 +34,7 @@ trait HttpClientAssertionsTrait
         $expectedRequestHasBeenFound = false;
 
         if (!\array_key_exists($httpClientId, $httpClientDataCollector->getClients())) {
-            static::fail(\sprintf('HttpClient "%s" is not registered.', $httpClientId));
+            static::fail(sprintf('HttpClient "%s" is not registered.', $httpClientId));
         }
 
         foreach ($httpClientDataCollector->getClients()[$httpClientId]['traces'] as $trace) {
@@ -101,7 +102,7 @@ trait HttpClientAssertionsTrait
         $unexpectedUrlHasBeenFound = false;
 
         if (!\array_key_exists($httpClientId, $httpClientDataCollector->getClients())) {
-            static::fail(\sprintf('HttpClient "%s" is not registered.', $httpClientId));
+            static::fail(sprintf('HttpClient "%s" is not registered.', $httpClientId));
         }
 
         foreach ($httpClientDataCollector->getClients()[$httpClientId]['traces'] as $trace) {
@@ -113,7 +114,7 @@ trait HttpClientAssertionsTrait
             }
         }
 
-        self::assertFalse($unexpectedUrlHasBeenFound, \sprintf('Unexpected URL called: "%s" - "%s"', $expectedMethod, $unexpectedUrl));
+        self::assertFalse($unexpectedUrlHasBeenFound, sprintf('Unexpected URL called: "%s" - "%s"', $expectedMethod, $unexpectedUrl));
     }
 
     public static function assertHttpClientRequestCount(int $count, string $httpClientId = 'http_client'): void
